@@ -1,5 +1,16 @@
 import { defineStore } from 'pinia';
 
+// 🔑 CARTO Basemaps 金鑰（由 .env.local 的 VUE_APP_CARTO_KEY 提供）
+// 未設定時圖磚會被 CARTO 蓋上 "API KEY REQUIRED" 浮水印，申請：https://carto.com/basemaps/apikey/
+const CARTO_KEY = process.env.VUE_APP_CARTO_KEY || '';
+
+// CARTO 免費方案要求地圖上必須保留 CARTO 與 OpenStreetMap 的來源標註
+const CARTO_ATTRIBUTION =
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>';
+
+const cartoUrl = (path) =>
+  `https://{s}.basemaps.cartocdn.com/${path}/{z}/{x}/{y}{r}.png?key=${CARTO_KEY}`;
+
 export const useDefineStore = defineStore('define', {
   state: () => ({
     selectedBasemap: 'carto_light_labels', // 當前選中的底圖
@@ -57,17 +68,20 @@ export const useDefineStore = defineStore('define', {
       {
         label: 'Carto Light',
         value: 'carto_light_labels',
-        url: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',
+        url: cartoUrl('light_all'),
+        attribution: CARTO_ATTRIBUTION,
       },
       {
         label: 'Carto Dark',
         value: 'carto_dark_labels',
-        url: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',
+        url: cartoUrl('dark_all'),
+        attribution: CARTO_ATTRIBUTION,
       },
       {
         label: 'Carto Voyager',
         value: 'carto_voyager',
-        url: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+        url: cartoUrl('rastertiles/voyager'),
+        attribution: CARTO_ATTRIBUTION,
       },
       {
         label: '白色地圖',

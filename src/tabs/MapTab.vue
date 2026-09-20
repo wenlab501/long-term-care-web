@@ -91,7 +91,7 @@
             center: defineStore.mapView.center, // 使用保存的地圖中心點
             zoom: defineStore.mapView.zoom, // 使用保存的縮放等級
             zoomControl: false, // 禁用預設縮放控制項
-            attributionControl: false, // 禁用預設版權資訊控制項
+            attributionControl: true, // 顯示版權資訊（CARTO 免費方案要求保留來源標註）
           });
 
           // 綁定地圖事件處理器
@@ -216,7 +216,10 @@
         // 步驟三：只有在找到設定檔(config)且 URL 不是空值(falsy)時，才加入新的圖層
         // 由於空字串 '' 是 falsy 值，這個判斷式會自動過濾掉 url 為 '' 的情況。
         if (config && config.url) {
-          currentTileLayer = L.tileLayer(config.url, { attribution: '' });
+          currentTileLayer = L.tileLayer(config.url, {
+            attribution: config.attribution || '',
+            subdomains: 'abcd',
+          });
           currentTileLayer.addTo(mapInstance);
         }
 
